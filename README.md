@@ -1,73 +1,135 @@
-# React + TypeScript + Vite
+# 📈 Stock Scanner Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend for scanning and visualizing stock market movements.  
+This application connects to a FastAPI backend that retrieves stock data from an external API, processes it, saves it to Firestore, and returns formatted results.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- **Trigger Stock Scan**  
+  Initiates a scan via the backend's `POST /scan` endpoint.
+  
+- **FastAPI-Powered Backend**  
+  The backend fetches stock data from the external API, formats it, saves it to Firestore, and returns the results.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Interactive Data Grid (MUI)**  
+  Displays stock symbols, last price, percentage change, volume, and exchange.
 
-## Expanding the ESLint configuration
+- **Clean Architecture**  
+  UI components and API service logic are kept separate for clarity and scalability.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🧱 Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### **Frontend**
+- React (TypeScript)
+- MUI & MUI X (DataGrid)
+- Vite (or CRA—depending on your setup)
+- Fetch API for backend requests
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### **Backend**
+- FastAPI (Python)
+- Firestore database
+- External Stock API (FMP or others)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📂 Project Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+/src
+/components
+StockTable.tsx # Main DataGrid component
+/services
+stock-service.ts # Calls the FastAPI backend
+
+yaml
+Copy code
+
+---
+
+## 🔌 Backend Setup
+
+The app expects a FastAPI backend running at:
+
+http://localhost:8000
+
+bash
+Copy code
+
+The backend must expose:
+
+### `POST /scan`
+
+**Example response:**
+
+```json
+{
+  "status": "ok",
+  "count": 20,
+  "results": [
+    {
+      "symbol": "AAPL",
+      "price": 189.20,
+      "changesPercentage": 2.41,
+      "volume": 55392000,
+      "exchange": "NASDAQ"
+    }
+  ]
+}
+🖥️ Running the Frontend
+Install dependencies:
+bash
+Copy code
+npm install
+Start development server:
+bash
+Copy code
+npm run dev
+The app will open at:
+
+arduino
+Copy code
+http://localhost:5173
+(or http://localhost:3000 depending on your setup)
+
+📊 UI Preview
+The main table displays:
+
+Symbol
+
+Last Price
+
+Percent Change (colored chips)
+
+Volume
+
+Exchange
+
+Users can click Run Scan to execute a full stock scan and populate the table.
+
+🛠️ Development Workflow
+Start backend (FastAPI):
+bash
+Copy code
+uvicorn scanner.stock_scanner:app --reload
+Start frontend:
+bash
+Copy code
+npm run dev
+Trigger a scan:
+Click Run Scan to call the backend, fetch stock data, and update the grid.
+
+📦 Build for Production
+bash
+Copy code
+npm run build
+The production build will be output to the dist/ folder.
+
+🤝 Contributing
+Pull requests are welcome!
+Please open an issue if you'd like to request a feature or report a bug.
+
+📜 License
+MIT License © 2025
