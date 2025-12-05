@@ -44,19 +44,13 @@ StockTable.tsx # Main DataGrid component
 /services
 stock-service.ts # Calls the FastAPI backend
 
-yaml
-Copy code
-
 ---
 
 ## 🔌 Backend Setup
 
 The app expects a FastAPI backend running at:
 
-http://localhost:8000
-
-bash
-Copy code
+`http://localhost:8000`
 
 The backend must expose:
 
@@ -78,20 +72,18 @@ The backend must expose:
     }
   ]
 }
-🖥️ Running the Frontend
-Install dependencies:
-bash
-Copy code
-npm install
-Start development server:
-bash
-Copy code
-npm run dev
-The app will open at:
+```
 
-arduino
-Copy code
-http://localhost:5173
+🖥️ Running the Frontend
+
+Install dependencies:
+`npm install`
+
+Start development server:
+`npm run dev`
+
+The app will open at:
+`http://localhost:5173`
 (or http://localhost:3000 depending on your setup)
 
 📊 UI Preview
@@ -110,26 +102,17 @@ Exchange
 Users can click Run Scan to execute a full stock scan and populate the table.
 
 🛠️ Development Workflow
+
 Start backend (FastAPI):
-bash
-Copy code
-uvicorn scanner.stock_scanner:app --reload
+`uvicorn scanner.stock_scanner:app --reload`
+
 Start frontend:
-bash
-Copy code
-npm run dev
+`npm run dev`
+
 Trigger a scan:
 Click Run Scan to call the backend, fetch stock data, and update the grid.
 
 📦 Build for Production
-bash
-Copy code
-npm run build
+`npm run build`
+
 The production build will be output to the dist/ folder.
-
-🤝 Contributing
-Pull requests are welcome!
-Please open an issue if you'd like to request a feature or report a bug.
-
-📜 License
-MIT License © 2025
