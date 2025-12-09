@@ -4,6 +4,7 @@ import { AppBar, Box, CssBaseline, Toolbar, Typography } from '@mui/material'
 import StockTable from './components/data-grid-component/data-grid-component'
 import SideBar from './components/sidebar-component/sidebar-component'
 import { useState } from 'react';
+import MarketOverview from './components/market-overview-component/market-overview';
 
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Toolbar />
+      {/* <Toolbar /> */}
 
       <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
 
@@ -31,6 +32,7 @@ function App() {
         />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
+          <MarketOverview />
           <StockTable />
         </Box>
       </Box>
