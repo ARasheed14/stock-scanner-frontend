@@ -1,10 +1,11 @@
-import './App.css'
-import { AppBar, Box, CssBaseline, Toolbar, Typography } from '@mui/material'
-
-import StockTable from './components/data-grid-component/data-grid-component'
-import SideBar from './components/sidebar-component/sidebar-component'
+import './App.css';
 import { useState } from 'react';
+import { AppBar, Box, CssBaseline, Toolbar, Typography } from '@mui/material';
+
 import MarketOverview from './components/market-overview-component/market-overview';
+import NewsSectionComponent from './components/news-section-component/news-section-component';
+import SideBar from './components/sidebar-component/sidebar-component';
+import StockTable from './components/data-grid-component/data-grid-component';
 
 function App() {
 
@@ -22,8 +23,6 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      {/* <Toolbar /> */}
-
       <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
 
         <SideBar 
@@ -34,6 +33,7 @@ function App() {
         <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
           <MarketOverview />
           <StockTable />
+          <NewsSectionComponent />
         </Box>
       </Box>
     </>
