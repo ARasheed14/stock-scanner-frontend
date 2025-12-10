@@ -31,7 +31,7 @@ const columns: GridColDef[] = [
   { field: 'exchange', headerName: 'Exchange', width: 160 },
 ];
 
-export default function StockTable() {
+export default function StockTableComponent() {
   const [rows, setRows] = useState<StockRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

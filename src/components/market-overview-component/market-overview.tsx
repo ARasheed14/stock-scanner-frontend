@@ -19,7 +19,7 @@ const mockData: MarketIndex[] = [
     { id: '4', name: 'FTSE 100', symbol: 'FTSE', price: 7000.50, changePct: -0.1 },
 ];
 
-export default function MarketOverview({ items = mockData }: MarketOverviewProps) {
+export default function MarketOverviewComponent({ items = mockData }: MarketOverviewProps) {
     return (
         <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 600 }}>
