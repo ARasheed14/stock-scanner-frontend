@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, Drawer, FormControl, FormControlLabel, Icon, IconButton, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, Drawer, FormControl, FormControlLabel, IconButton, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 
 import ExpandMoreIcons from '@mui/icons-material/ExpandMore';
@@ -22,7 +22,7 @@ type SavedFilter = {
     name: string;
 }
 
-export default function SideBar({ priceChangePct, onPriceChangePct }: SideBarProps) {
+export default function SideBarComponent({ priceChangePct, onPriceChangePct }: SideBarProps) {
 
     const [savedFilters, setSavedFilters] = useState<SavedFilter[]>(initialSavedFilters);
 
