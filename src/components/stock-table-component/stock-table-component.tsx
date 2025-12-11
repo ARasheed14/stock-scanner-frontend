@@ -4,21 +4,23 @@ import { Chip, Paper, Button, Stack } from '@mui/material';
 import { runScan } from '../../services/stock-service';
 
 type StockRow = {
-  id: number;
+  id: string;
   symbol: string;
   last: number;
   changePercent: number;
   volume: number;
   exchange: string;
+  floatShares?: number | string;
 };
 
 const columns: GridColDef[] = [
-  { field: 'symbol', headerName: 'Symbol', width: 120 },
+  { field: 'symbol', headerName: 'Symbol', width: 120, type: 'string' },
   { field: 'last', headerName: 'Last', width: 120, type: 'number' },
   {
     field: 'changePercent',
     headerName: 'Chg(%)',
     width: 120,
+    type: 'number',
     renderCell: (params) => (
       <Chip
         label={`${params.value}%`}
@@ -27,8 +29,9 @@ const columns: GridColDef[] = [
       />
     ),
   },
-  { field: 'volume', headerName: 'Volume', width: 150 },
-  { field: 'exchange', headerName: 'Exchange', width: 160 },
+  { field: 'volume', headerName: 'Volume', width: 150, type: 'number' },
+  { field: 'exchange', headerName: 'Exchange', width: 160, type: 'string' },
+  { field: 'floatShares', headerName: 'Float', minWidth: 160, flex: 1, type: 'number' },
 ];
 
 export default function StockTableComponent() {
@@ -45,17 +48,20 @@ export default function StockTableComponent() {
       const data = await runScan();
       console.log(data.results); // this is the formatted list from FMP, also saved in Firestore
 
-      const mappedRows: StockRow[] = data.results.map((item: any, index: number) => ({
-        id: item.symbol ?? index,
+      const mappedRows: StockRow[] = data.results
+      .filter((item: any) => item.symbol)
+      .map((item: any) => ({
+        id: item.symbol,
         symbol: item.symbol,
         last: item.price,
         changePercent: Number(
-            (item.changesPercentage ?? 0).toFixed
+            item.changesPercentage?.toFixed
               ? item.changesPercentage.toFixed(2)
               : item.changesPercentage ?? 0
           ),
         volume: item.volume ?? 0,
-        exchange: item.exchange
+        exchange: item.exchange,
+        floatShares: item.floatShares ?? 'N/A',
       }));
 
       setRows(mappedRows);
