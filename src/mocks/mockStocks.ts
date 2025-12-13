@@ -1,4 +1,4 @@
-import type { MarketIndex } from "../components/types/types";
+import type { MarketIndex, NewsItem } from "../components/types/types";
 
 export const MOCK_TOP_MOVERS = [
     {
@@ -228,4 +228,12 @@ export const MOCK_INDEXES: MarketIndex[] = [
     { id: '2', name: 'Dow Jones', symbol: 'DJI', price: 35000.75, changePct: -0.3 },
     { id: '3', name: 'NASDAQ', symbol: 'IXIC', price: 15000.10, changePct: 1.2 },
     { id: '4', name: 'FTSE 100', symbol: 'FTSE', price: 7000.50, changePct: -0.1 },
+];
+
+export const MOCK_NEWS: NewsItem[] = [
+    { id: '1', headline: 'Market hits all-time high amid economic recovery', summary: 'The stock market reached a new peak today as economic indicators show signs of recovery.', source: 'Reuters', timeAgo: '2h ago', symbol: 'SPX', sentiment: 'positive', Rating: 'A-' },
+    { id: '2', headline: 'Tech stocks lead the way in today\'s trading session', summary: 'Technology companies saw significant gains, driving the market higher.', source: 'Bloomberg', timeAgo: '3h ago', symbol: 'AAPL', sentiment: 'positive', Rating: 'A+'  },
+    { id: '3', headline: 'Concerns over inflation impact investor sentiment', summary: 'Rising inflation fears are causing some investors to be cautious.', source: 'CNBC', timeAgo: '5h ago', sentiment: 'negative'  },
+    { id: '4', headline: 'New regulations expected to affect financial sector', summary: 'Upcoming regulatory changes may impact banks and financial institutions.', source: 'WSJ', timeAgo: '1d ago', symbol: 'JPM', sentiment: 'neutral', Rating: 'B'  },
+    { id: '5', headline: 'Energy sector sees mixed results amid fluctuating oil prices', summary: 'Oil price volatility is leading to varied performance in energy stocks.', source: 'Financial Times', timeAgo: '1d ago', symbol: 'XOM', sentiment: 'neutral', Rating: 'D'  },
 ];

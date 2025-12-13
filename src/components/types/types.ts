@@ -1,3 +1,5 @@
+export type Sentiment = "positive" | "negative" | "neutral";
+
 export type MarketIndex = {
     id: string;
     name: string;
@@ -23,4 +25,15 @@ export type ScanResultItem = {
   volume?: number;
   exchange?: string;
   floatShares?: number;
+};
+
+export type NewsItem = {
+    id: string;
+    headline: string;
+    summary?: string;
+    source: string;
+    timeAgo: string;
+    symbol?: string;
+    sentiment?: Sentiment;
+    Rating?: string;
 };

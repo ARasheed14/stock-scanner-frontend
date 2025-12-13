@@ -1,27 +1,13 @@
 import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
-
-type Sentiment = "positive" | "negative" | "neutral";
-
-export type NewsItem = {
-    id: string;
-    headline: string;
-    summary?: string;
-    source: string;
-    timeAgo: string;
-    symbol?: string;
-    sentiment?: Sentiment;
-};
+import PremiumRatingComponent from "../premium-rating-component/premium-rating-component";
+import type { NewsItem, Sentiment } from "../types/types";
 
 type NewsSectionProps = {
-    items?: NewsItem[];
+    items: NewsItem[];
 };
 
-const mockNews: NewsItem[] = [
-    { id: '1', headline: 'Market hits all-time high amid economic recovery', summary: 'The stock market reached a new peak today as economic indicators show signs of recovery.', source: 'Reuters', timeAgo: '2h ago', symbol: 'SPX', sentiment: 'positive' },
-    { id: '2', headline: 'Tech stocks lead the way in today\'s trading session', summary: 'Technology companies saw significant gains, driving the market higher.', source: 'Bloomberg', timeAgo: '3h ago', symbol: 'AAPL', sentiment: 'positive' },
-    { id: '3', headline: 'Concerns over inflation impact investor sentiment', summary: 'Rising inflation fears are causing some investors to be cautious.', source: 'CNBC', timeAgo: '5h ago', sentiment: 'negative' },
-    { id: '4', headline: 'New regulations expected to affect financial sector', summary: 'Upcoming regulatory changes may impact banks and financial institutions.', source: 'WSJ', timeAgo: '1d ago', symbol: 'JPM', sentiment: 'neutral' },
-];
+// Once profile creation is implemented this will be controlled by user subscription status
+const PREMIUM_RATING_LOCKED = false;
 
 function sentimentColor(sentiment?: Sentiment) {
     if (sentiment === 'positive') return 'success';
@@ -29,7 +15,7 @@ function sentimentColor(sentiment?: Sentiment) {
     return 'default';
 }
 
-export default function NewsSectionComponent({ items = mockNews }: NewsSectionProps) {
+export default function NewsSectionComponent({ items }: NewsSectionProps) {
     return (
         <Box sx={{ mt: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 600 }}>
@@ -37,13 +23,13 @@ export default function NewsSectionComponent({ items = mockNews }: NewsSectionPr
             </Typography>
             <Stack spacing={2}>
                 {items.map((news) => (
-                    <Card key={news.id} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
-                        <CardContent sx={{ p: 0 }}>
+                    <Card key={news.id} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2, display: 'flex', alignItems: 'stretch', justifyContent: 'space-between', gap: 2 }}>
+                        <CardContent sx={{ p: 0, flex: 1, minWidth: 0 }}>
                             <Typography variant="body1" sx={{ fontWeight: 600, mb: 0.5 }}>
                                 {news.headline}
                             </Typography>
                             {news.summary && (
-                                <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, lineHeight: 1.4 }}>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                     {news.summary}
                                 </Typography>
                             )}
@@ -62,6 +48,7 @@ export default function NewsSectionComponent({ items = mockNews }: NewsSectionPr
 
                             </Stack>
                         </CardContent>
+                        <PremiumRatingComponent value={news.Rating ?? "--"} locked={PREMIUM_RATING_LOCKED} />
                     </Card>
                 ))}
             </Stack>
