@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, CssBaseline } from '@mui/material';
 
 import HeaderComponent from './components/header-component/header-component';
@@ -8,9 +8,8 @@ import NewsSectionComponent from './components/news-section-component/news-secti
 import SideBarComponent from './components/sidebar-component/sidebar-component';
 import StockTableComponent from './components/stock-table-component/stock-table-component';
 
-import { MOCK_INDEXES } from './mocks/mockStocks';
-import type { ScanResultItem, StockRow } from './components/types/types';
-import { runScan } from './services/stock-service';
+import type { MarketIndex, ScanResultItem, StockRow } from './components/types/types';
+import { runScan, getIndexesData } from './services/stock-service';
 
 function App() {
 
@@ -18,6 +17,24 @@ function App() {
   const [rows, setRows] = useState<StockRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [indexes, setIndexes] = useState<MarketIndex[]>([]);
+
+  React.useEffect(() => {
+    async function loadIndexes() {
+      try {
+        setLoading(true);
+        const data = await getIndexesData();
+        setIndexes(data?.results ?? []);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : "Failed to load indexes");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadIndexes();
+  }, []);
+
 
   const handleRunScan = async () => {
 
@@ -66,7 +83,7 @@ function App() {
         />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
-          <MarketOverviewComponent items={MOCK_INDEXES} />
+          <MarketOverviewComponent items={indexes} />
           <StockTableComponent rows={rows} loading={loading} error={error} onRunScan={handleRunScan} />
           <NewsSectionComponent />
         </Box>
