@@ -25,7 +25,7 @@ export default function StaticChartComponent({ changePct, height = 60, id, durat
   const xs = [0, 1, 2, 3].map(i => pad + (innerW * i) / 3);
 
   // Define a single "up" profile, then mirror it for "down"
-  const upYs = [42, 18, 34, 12]; 
+  const upYs = [42, 18, 34, 12];
   const mid = H / 2;
   const downYs = upYs.map(y => mid + (mid - y)); // mirror around midline
 
@@ -40,27 +40,26 @@ export default function StaticChartComponent({ changePct, height = 60, id, durat
     pts.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ') +
     ` L ${pts[pts.length - 1].x} ${H} L ${pts[0].x} ${H} Z`;
 
-    const polyRef = React.useRef<SVGPolylineElement | null>(null);
-    const [len, setLen] = React.useState(0);
+  const polyRef = React.useRef<SVGPolylineElement | null>(null);
 
-    // measure after render
-    React.useLayoutEffect(() => {
-        if (!polyRef.current) return;
-        const l = polyRef.current.getTotalLength();
-        setLen(l);
+  // measure after render
+  React.useLayoutEffect(() => {
+    const el = polyRef.current;
+    if (!el) return;
 
-        // reset to 'hidden' so re-reanders replay nicely
-        polyRef.current.style.strokeDasharray = `${l}`;
-        polyRef.current.style.strokeDashoffset = `${l}`;
+    const length = el.getTotalLength();
 
-        // Trigger animation on next frame
-        requestAnimationFrame(() => {
-            if (!polyRef.current) return;
-            polyRef.current.style.transition = `stroke-dashoffset ${durationMs}ms ease`;
-            polyRef.current.style.strokeDashoffset = '0';
-        });
+    // reset to 'hidden' so re-renders replay nicely
+    el.style.strokeDasharray = `${length}`;
+    el.style.strokeDashoffset = `${length}`;
 
-    }), [polyPoints, durationMs]
+    // Trigger animation on next frame
+    requestAnimationFrame(() => {
+      el.style.transition = `stroke-dashoffset ${durationMs}ms ease`;
+      el.style.strokeDashoffset = '0';
+    });
+
+  }, [polyPoints, durationMs]);
 
   return (
     <svg
@@ -84,15 +83,13 @@ export default function StaticChartComponent({ changePct, height = 60, id, durat
       <g clipPath={`url(#${clipId})`}>
         <path d={areaPath} fill={`url(#${gradId})`} />
         <polyline
-            ref={polyRef}
-            points={polyPoints}
-            fill="none"
-            stroke={color}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray={len || undefined}
-            strokeDashoffset={len || undefined}
+          ref={polyRef}
+          points={polyPoints}
+          fill="none"
+          stroke={color}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
     </svg>

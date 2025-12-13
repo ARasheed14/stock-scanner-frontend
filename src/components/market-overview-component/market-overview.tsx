@@ -1,26 +1,13 @@
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import StaticChartComponent from "../static-chart-component/static-chart-component";
+import type { MarketIndex } from "../types/types";
 
-export type MarketIndex = {
-    id: string;
-    name: string;
-    symbol: string;
-    price: number;
-    changePct: number;
-};
 
 type MarketOverviewProps = {
-    items?: MarketIndex[];
+    items: MarketIndex[];
 };
 
-const mockData: MarketIndex[] = [
-    { id: '1', name: 'S&P 500', symbol: 'SPX', price: 4500.25, changePct: 0.5 },
-    { id: '2', name: 'Dow Jones', symbol: 'DJI', price: 35000.75, changePct: -0.3 },
-    { id: '3', name: 'NASDAQ', symbol: 'IXIC', price: 15000.10, changePct: 1.2 },
-    { id: '4', name: 'FTSE 100', symbol: 'FTSE', price: 7000.50, changePct: -0.1 },
-];
-
-export default function MarketOverviewComponent({ items = mockData }: MarketOverviewProps) {
+export default function MarketOverviewComponent({ items }: MarketOverviewProps) {
     return (
         <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 600 }}>

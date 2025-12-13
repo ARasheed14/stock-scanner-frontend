@@ -12,3 +12,10 @@ export async function runScan() {
   if (!res.ok) throw new Error("Scan failed");
   return res.json(); // { status, count, results: [...] }
 }
+
+export async function getIndexesData() {
+  
+  if (USE_MOCKS) return {results: MOCK_TOP_MOVERS};
+  // Implement real API call when not using mocks in future
+  return;
+}
