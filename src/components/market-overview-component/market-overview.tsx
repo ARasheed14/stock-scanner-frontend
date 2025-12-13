@@ -1,25 +1,13 @@
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import StaticChartComponent from "../static-chart-component/static-chart-component";
+import type { MarketIndex } from "../types/types";
 
-export type MarketIndex = {
-    id: string;
-    name: string;
-    symbol: string;
-    price: number;
-    changePct: number;
-};
 
 type MarketOverviewProps = {
-    items?: MarketIndex[];
+    items: MarketIndex[];
 };
 
-const mockData: MarketIndex[] = [
-    { id: '1', name: 'S&P 500', symbol: 'SPX', price: 4500.25, changePct: 0.5 },
-    { id: '2', name: 'Dow Jones', symbol: 'DJI', price: 35000.75, changePct: -0.3 },
-    { id: '3', name: 'NASDAQ', symbol: 'IXIC', price: 15000.10, changePct: 1.2 },
-    { id: '4', name: 'FTSE 100', symbol: 'FTSE', price: 7000.50, changePct: -0.1 },
-];
-
-export default function MarketOverviewComponent({ items = mockData }: MarketOverviewProps) {
+export default function MarketOverviewComponent({ items }: MarketOverviewProps) {
     return (
         <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 600 }}>
@@ -31,21 +19,27 @@ export default function MarketOverviewComponent({ items = mockData }: MarketOver
                     const isPositive = item.changePct >= 0;
                     return (
                         <Card key={item.id} elevation={3} sx={{ flex: 1, minWidth: 0 }}>
-                        <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 0.5}}>
-                            <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 0.8 }}>
-                                {item.name}
-                            </Typography>
-                            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                                {item.symbol}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                ${item.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                            </Typography>
-                            <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 600, color: isPositive ? 'success.main' : 'error.main' }}>
-                                {isPositive ? '+' : ''}{item.changePct.toFixed(2)}%
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                            <CardContent sx={{ display: 'flex', alignItems: 'stretch',  gap: 2 }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, minWidth: 0, flex: '0 0 auto', maxWidth: 220 }}>
+                                    <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1 }}>
+                                        {item.name}
+                                    </Typography>
+                                    <Typography variant="h5" sx={{ fontWeight: 500, letterSpacing: 0.3 }}>
+                                        {item.symbol}
+                                    </Typography>
+                                    <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
+                                        ${item.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ fontWeight: 600, color: isPositive ? 'success.main' : 'error.main' }}>
+                                        {isPositive ? '+' : ''}{item.changePct.toFixed(2)}%
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ flex: '1 1 0%', minWidth: 0, display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+                                    <StaticChartComponent changePct={item.changePct} height={80} id={item.id} />
+                                </Box>
+                            </CardContent>
+                        </Card>
                     );
                 })}
             </Stack>

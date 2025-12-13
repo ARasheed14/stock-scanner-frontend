@@ -1,3 +1,5 @@
+import type { MarketIndex } from "../components/types/types";
+
 export const MOCK_TOP_MOVERS = [
     {
         "symbol": "BNKK",
@@ -219,4 +221,11 @@ export const MOCK_TOP_MOVERS = [
       "floatShares": 0,
       "sharesOutstanding": 2832050
     }
+];
+
+export const MOCK_INDEXES: MarketIndex[] = [
+    { id: '1', name: 'S&P 500', symbol: 'SPX', price: 4500.25, changePct: 0.5 },
+    { id: '2', name: 'Dow Jones', symbol: 'DJI', price: 35000.75, changePct: -0.3 },
+    { id: '3', name: 'NASDAQ', symbol: 'IXIC', price: 15000.10, changePct: 1.2 },
+    { id: '4', name: 'FTSE 100', symbol: 'FTSE', price: 7000.50, changePct: -0.1 },
 ];

@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Chip, Paper, Button, Stack } from '@mui/material';
-import { runScan } from '../../services/stock-service';
+import type { StockRow } from '../types/types';
 
-type StockRow = {
-  id: string;
-  symbol: string;
-  last: number;
-  changePercent: number;
-  volume: number;
-  exchange: string;
-  floatShares?: number | string;
-};
+export type StockTableProps = {
+    rows: StockRow[];
+    loading: boolean;
+    error: string | null;
+    onRunScan: () => void;
+}
 
 const columns: GridColDef[] = [
   { field: 'symbol', headerName: 'Symbol', width: 120, type: 'string' },
@@ -31,53 +27,20 @@ const columns: GridColDef[] = [
   },
   { field: 'volume', headerName: 'Volume', width: 150, type: 'number' },
   { field: 'exchange', headerName: 'Exchange', width: 160, type: 'string' },
-  { field: 'floatShares', headerName: 'Float', minWidth: 160, flex: 1, type: 'number' },
+  { field: 'floatShares', headerName: 'Float', minWidth: 160, flex: 1, type: 'number', renderCell: (params) =>
+    typeof params.value === 'number'
+      ? params.value.toLocaleString()
+      : '', 
+    }
 ];
 
-export default function StockTableComponent() {
-  const [rows, setRows] = useState<StockRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleRunScan = async () => {
-    
-    try {
-      setLoading(true);
-      setError(null);
-
-      const data = await runScan();
-      console.log(data.results); // this is the formatted list from FMP, also saved in Firestore
-
-      const mappedRows: StockRow[] = data.results
-      .filter((item: any) => item.symbol)
-      .map((item: any) => ({
-        id: item.symbol,
-        symbol: item.symbol,
-        last: item.price,
-        changePercent: Number(
-            item.changesPercentage?.toFixed
-              ? item.changesPercentage.toFixed(2)
-              : item.changesPercentage ?? 0
-          ),
-        volume: item.volume ?? 0,
-        exchange: item.exchange,
-        floatShares: item.floatShares ?? 'N/A',
-      }));
-
-      setRows(mappedRows);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function StockTableComponent({ rows, loading, error, onRunScan }: StockTableProps) {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Stack direction="row" spacing={2} mb={2}>
         <Button
           variant="contained"
-          onClick={handleRunScan}
+          onClick={onRunScan}
           disabled={loading}
         >
           {loading ? 'Running scan…' : 'Run scan'}
