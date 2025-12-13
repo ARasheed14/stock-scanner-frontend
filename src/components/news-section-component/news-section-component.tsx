@@ -1,8 +1,9 @@
 import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
 import PremiumRatingComponent from "../premium-rating-component/premium-rating-component";
-import type { NewsItem, Sentiment } from "../types/types";
+import type { NewsItem, Sentiment } from "../../types/types";
 
 type NewsSectionProps = {
+    loading: boolean;
     items: NewsItem[];
 };
 

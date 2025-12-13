@@ -1,35 +1,21 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, Drawer, FormControl, FormControlLabel, IconButton, List, ListItem, ListItemButton, ListItemText, Radio, RadioGroup, Toolbar, Typography } from "@mui/material";
-import { useState } from "react";
 
 import ExpandMoreIcons from '@mui/icons-material/ExpandMore';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import type { SavedFilter } from "../../types/types";
 
 const drawerWidth = 280;
 
 type SideBarProps = {
     priceChangePct: "4" | "10" | null;
     onPriceChangePct: (value: "4" | "10" | null) => void;
+    savedFilters: SavedFilter[];
+    onDeleteFilter: (id: string) => void;
+    loading: boolean;
+    error: string | null;
 };
 
-const initialSavedFilters = [
-    { id: "volume", name: "Volume" },
-    { id: "exchange", name: "Exchange" },
-    { id: "gainers", name: "Price 10%+" },
-];
-
-type SavedFilter = {
-    id: string;
-    name: string;
-}
-
-export default function SideBarComponent({ priceChangePct, onPriceChangePct }: SideBarProps) {
-
-    const [savedFilters, setSavedFilters] = useState<SavedFilter[]>(initialSavedFilters);
-
-    const onDeleteFilter = (id: string) => {
-        console.log("Delete Filter Clicked:", id);
-        setSavedFilters((prevFilters) => prevFilters.filter((filter) => filter.id !== id));
-    };
+export default function SideBarComponent({ priceChangePct, onPriceChangePct, savedFilters, onDeleteFilter }: SideBarProps) {
 
     return (
         <Drawer

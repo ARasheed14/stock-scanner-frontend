@@ -19,12 +19,12 @@ export type StockRow = {
 };
 
 export type ScanResultItem = {
-  symbol?: string;
-  price?: number;
+  symbol: string;
+  price: number;
   changesPercentage?: number;
-  volume?: number;
-  exchange?: string;
-  floatShares?: number;
+  volume: number;
+  exchange: string;
+  floatShares: number | null;
 };
 
 export type NewsItem = {
@@ -36,4 +36,9 @@ export type NewsItem = {
     symbol?: string;
     sentiment?: Sentiment;
     Rating?: string;
+};
+
+export type SavedFilter = {
+    id: string;
+    name: string;
 };

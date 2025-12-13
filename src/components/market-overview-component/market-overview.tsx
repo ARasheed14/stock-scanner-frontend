@@ -1,9 +1,10 @@
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import StaticChartComponent from "../static-chart-component/static-chart-component";
-import type { MarketIndex } from "../types/types";
+import type { MarketIndex } from "../../types/types";
 
 
 type MarketOverviewProps = {
+    loading: boolean;
     items: MarketIndex[];
 };
 

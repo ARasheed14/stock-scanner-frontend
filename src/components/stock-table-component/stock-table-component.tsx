@@ -1,6 +1,6 @@
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Chip, Paper, Button, Stack } from '@mui/material';
-import type { StockRow } from '../types/types';
+import type { StockRow } from '../../types/types';
 
 export type StockTableProps = {
     rows: StockRow[];
