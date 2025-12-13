@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, CssBaseline } from '@mui/material';
 
 import HeaderComponent from './components/header-component/header-component';
@@ -8,60 +8,34 @@ import NewsSectionComponent from './components/news-section-component/news-secti
 import SideBarComponent from './components/sidebar-component/sidebar-component';
 import StockTableComponent from './components/stock-table-component/stock-table-component';
 
-import type { MarketIndex, NewsItem, ScanResultItem, StockRow } from './components/types/types';
-import { runScan, getIndexesData, getNewsList } from './services/stock-service';
+import type { ScanResultItem, StockRow } from './types/types';
+import { useIndexesData } from './hooks/useIndexesData';
+import { useNewsData } from './hooks/useNewsData';
+import { useSavedFilters } from './hooks/useSavedFilters';
+import { useScanRunner } from './hooks/useScanRunner';
 
 function App() {
 
   const [priceChangePct, setPriceChangePct] = useState<"4" | "10" | null>(null);
   const [rows, setRows] = useState<StockRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [indexes, setIndexes] = useState<MarketIndex[]>([]);
-  const [newsList, setNews] = useState<NewsItem[]>([]);
 
-  React.useEffect(() => {
-    async function loadIndexes() {
-      try {
-        setLoading(true);
-        const data = await getIndexesData();
-        setIndexes(data?.results ?? []);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : "Failed to load indexes");
-      } finally {
-        setLoading(false);
-      }
-    }
+  const { indexes, loading: indexesLoading } = useIndexesData();
+  const { newsList, loading: newsLoading } = useNewsData();
 
-    async function loadNews() {
-    try {
-      setLoading(true);
-      const data = await getNewsList();
-      setNews(data?.results ?? []);
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Failed to load news"
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-    loadIndexes();
-    loadNews();
-  }, []);
+  const { savedFilters, loading: savedFiltersLoading, error: savedFiltersErrors, setSavedFilters } = useSavedFilters();
+  const { loading: scanLoading, error: scanError, scan } = useScanRunner();
+;
+  const onDeleteFilter = (id: string) => {
+    // UI-only delete for now; later swap to service call + refetch
+    setSavedFilters((prev) => (prev ?? []).filter((f) => f.id !== id));
+  };
 
 
   const handleRunScan = async () => {
-
     try {
-      setLoading(true);
-      setError(null);
+      const data = await scan();
 
-      const data = await runScan();
-      console.log(data.results); // this is the formatted list from FMP, also saved in Firestore
-
-      const mappedRows: StockRow[] = data.results
+      const mappedRows: StockRow[] = (data.results ?? [])
         .filter((item: ScanResultItem) => item.symbol)
         .map((item: ScanResultItem) => ({
           id: item.symbol,
@@ -78,11 +52,9 @@ function App() {
         }));
 
       setRows(mappedRows);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (error){
+      console.log(error);
+    } 
   };
 
   return (
@@ -96,12 +68,16 @@ function App() {
         <SideBarComponent
           priceChangePct={priceChangePct}
           onPriceChangePct={setPriceChangePct}
+          savedFilters={savedFilters}
+          onDeleteFilter={onDeleteFilter}
+          loading={savedFiltersLoading}
+          error={savedFiltersErrors}
         />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
-          <MarketOverviewComponent items={indexes} />
-          <StockTableComponent rows={rows} loading={loading} error={error} onRunScan={handleRunScan} />
-          <NewsSectionComponent items={newsList}/>
+          <MarketOverviewComponent items={indexes} loading={indexesLoading} />
+          <StockTableComponent rows={rows} loading={scanLoading} error={scanError} onRunScan={handleRunScan} />
+          <NewsSectionComponent items={newsList} loading={newsLoading} />
         </Box>
       </Box>
     </>
