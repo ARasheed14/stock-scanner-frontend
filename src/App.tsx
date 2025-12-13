@@ -8,8 +8,8 @@ import NewsSectionComponent from './components/news-section-component/news-secti
 import SideBarComponent from './components/sidebar-component/sidebar-component';
 import StockTableComponent from './components/stock-table-component/stock-table-component';
 
-import type { MarketIndex, ScanResultItem, StockRow } from './components/types/types';
-import { runScan, getIndexesData } from './services/stock-service';
+import type { MarketIndex, NewsItem, ScanResultItem, StockRow } from './components/types/types';
+import { runScan, getIndexesData, getNewsList } from './services/stock-service';
 
 function App() {
 
@@ -18,6 +18,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [indexes, setIndexes] = useState<MarketIndex[]>([]);
+  const [newsList, setNews] = useState<NewsItem[]>([]);
 
   React.useEffect(() => {
     async function loadIndexes() {
@@ -32,7 +33,22 @@ function App() {
       }
     }
 
+    async function loadNews() {
+    try {
+      setLoading(true);
+      const data = await getNewsList();
+      setNews(data?.results ?? []);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Failed to load news"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
     loadIndexes();
+    loadNews();
   }, []);
 
 
@@ -85,7 +101,7 @@ function App() {
         <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
           <MarketOverviewComponent items={indexes} />
           <StockTableComponent rows={rows} loading={loading} error={error} onRunScan={handleRunScan} />
-          <NewsSectionComponent />
+          <NewsSectionComponent items={newsList}/>
         </Box>
       </Box>
     </>
