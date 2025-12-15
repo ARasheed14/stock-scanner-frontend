@@ -1,7 +1,6 @@
-// src/services/httpClient.ts
-const API_BASE_URL = "http://localhost:8000";
 import { MOCK_TOP_MOVERS, MOCK_INDEXES, MOCK_NEWS, MOCK_SAVED_FILTERS } from "../mocks/mockStocks";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const USE_MOCKS = true; // Toggle this to switch between mocks and real API
 
 export async function runScan() {
