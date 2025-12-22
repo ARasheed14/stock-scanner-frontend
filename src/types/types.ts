@@ -42,3 +42,15 @@ export type SavedFilter = {
     id: string;
     name: string;
 };
+
+export type AccountType = {
+  basic: string;
+  premium_user: string;
+};
+
+export type AppUser = {
+  uid: string;
+  email: string;          // required for your UI
+  displayName?: string;   // optional if you ever add it back
+  accountType: AccountType;
+};

@@ -1,15 +1,22 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as userSignOut, updateProfile } from "firebase/auth";
-import { auth } from "./config";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "./config";
 
-export async function signUp(email: string, password: string, displayName?: string) {
+export async function signUp(email: string, password: string) {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
 
-    // Set display name on firebase record.
-    if (displayName && cred.user) {
-        await updateProfile(cred.user, { displayName });
-    }
+    await updateProfile(user, { displayName: email });
 
-    return cred.user;
+    await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: email,
+        accountType: "basic", // default
+        createdAt: serverTimestamp(),
+    });
+
+    return user;
 }
 
 export async function signIn(email: string, password: string) {
