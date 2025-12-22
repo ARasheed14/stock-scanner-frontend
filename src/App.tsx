@@ -1,6 +1,11 @@
 import './App.css';
 import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+
 import { Box, CssBaseline } from '@mui/material';
+
+import SignInPage from './pages/sign-in-page/sign-in-page';
+import SignUpPage from './pages/sing-up-page/sign-up-page';
 
 import HeaderComponent from './components/header-component/header-component';
 import MarketOverviewComponent from './components/market-overview-component/market-overview';
@@ -24,7 +29,7 @@ function App() {
 
   const { savedFilters, loading: savedFiltersLoading, error: savedFiltersErrors, setSavedFilters } = useSavedFilters();
   const { loading: scanLoading, error: scanError, scan } = useScanRunner();
-;
+  ;
   const onDeleteFilter = (id: string) => {
     // UI-only delete for now; later swap to service call + refetch
     setSavedFilters((prev) => (prev ?? []).filter((f) => f.id !== id));
@@ -52,9 +57,9 @@ function App() {
         }));
 
       setRows(mappedRows);
-    } catch (error){
+    } catch (error) {
       console.log(error);
-    } 
+    }
   };
 
   return (
@@ -63,25 +68,36 @@ function App() {
 
       <HeaderComponent />
 
-      <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
+      <Routes>
+        <Route path="/" element={<Navigate to="/search" replace />} />
 
-        <SideBarComponent
-          priceChangePct={priceChangePct}
-          onPriceChangePct={setPriceChangePct}
-          savedFilters={savedFilters}
-          onDeleteFilter={onDeleteFilter}
-          loading={savedFiltersLoading}
-          error={savedFiltersErrors}
-        />
+        <Route path="/search" element={
+          <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
-          <MarketOverviewComponent items={indexes} loading={indexesLoading} />
-          <StockTableComponent rows={rows} loading={scanLoading} error={scanError} onRunScan={handleRunScan} />
-          <NewsSectionComponent items={newsList} loading={newsLoading} />
-        </Box>
-      </Box>
+            <SideBarComponent
+              priceChangePct={priceChangePct}
+              onPriceChangePct={setPriceChangePct}
+              savedFilters={savedFilters}
+              onDeleteFilter={onDeleteFilter}
+              loading={savedFiltersLoading}
+              error={savedFiltersErrors}
+            />
+
+            <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
+              <MarketOverviewComponent items={indexes} loading={indexesLoading} />
+              <StockTableComponent rows={rows} loading={scanLoading} error={scanError} onRunScan={handleRunScan} />
+              <NewsSectionComponent items={newsList} loading={newsLoading} />
+            </Box>
+          </Box>
+        } />
+
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+
+        <Route path="*" element={<div>Not found</div>} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App
